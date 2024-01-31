@@ -99,34 +99,12 @@ def countEnergizedTiles(filename):
         DIRECTIONS[SOUTH] = num_cols
         DIRECTIONS[WEST] = -1
 
-        for row in range(len(grid)):
-            position = row * num_cols
-            poses = [(position, EAST)]
-            energized = getEnergized(grid, poses, num_cols)
-            if len(energized) > result:
-                result = len(energized)
-
-            position = (row + 1) * num_cols - 1
-            poses = [(position, WEST)]
-            energized = getEnergized(grid, poses, num_cols)
-            if len(energized) > result:
-                result = len(energized)
-            
-        for col in range(num_cols):
-            position = col
-            poses = [(position, SOUTH)]
-            energized = getEnergized(grid, poses, num_cols)
-            if len(energized) > result:
-                result = len(energized)
-
-            position = (len(grid) - 1) * num_cols + col
-            poses = [(position, NORTH)]
-            energized = getEnergized(grid, poses, num_cols)
-            if len(energized) > result:
-                result = len(energized)
+        poses = [(0, EAST)]
+        energized = getEnergized(grid, poses, num_cols)
+        result = len(energized)
         
     print('Answer for {} is {}'.format(filename, result))
 
 
-countEnergizedTiles(sampleFilename) # 51
-countEnergizedTiles(inputFilename) # 8437
+countEnergizedTiles(sampleFilename) # 46
+countEnergizedTiles(inputFilename) # 7979
