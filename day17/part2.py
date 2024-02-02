@@ -1,8 +1,6 @@
 import os
 import heapq
 
-from collections import defaultdict
-
 dayDir = os.path.dirname(__file__)
 sampleFilename = os.path.join(dayDir, 'sampleInput1.txt')
 sampleFilename2 = os.path.join(dayDir, 'sampleInput2.txt')
@@ -33,10 +31,8 @@ def getCol(pos, num_cols):
     return pos % num_cols
 
 def getTile(grid, pos, num_cols):
-    # print(pos)
     r = getRow(pos, num_cols)
     c = getCol(pos, num_cols)
-    # print(r, c)
     return grid[r][c]
 
 def isValidDirection(grid, num_cols, position, direction, steps=1):
@@ -49,22 +45,6 @@ def isValidDirection(grid, num_cols, position, direction, steps=1):
     if getRow(newPos, num_cols) != r and getCol(newPos, num_cols) != c:
         return False
     return True
-
-def getEnergized(grid, poses, num_cols):
-    energized = set()
-    seen = set()
-    while len(poses) > 0:
-        pose = poses.pop(0)
-        if pose not in seen:
-            (position, direction) = pose
-            tile = getTile(grid, position, num_cols)
-            energized.add(position)
-            seen.add(pose)
-            directions = TILES[tile][direction]
-            for d in directions:
-                if isValidDirection(grid, position, d, num_cols):
-                    poses.append((position + DIRECTIONS[d], d))
-    return energized
 
 def getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
     # if streak == 0 -> any direction that allows for 4 steps, not reverse
@@ -80,40 +60,28 @@ def getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
         exit_dirs.append(enter_dir)
     elif streak >= 4 and streak <= 9:
         for d in DIRECTIONS.keys():
-            if d == enter_dir:
-                if isValidDirection(grid, num_cols, pos, d):
-                    exit_dirs.append(d)
-            elif d != REVERSE_DIRECTIONS[enter_dir]:
-                if isValidDirection(grid, num_cols, pos, d, 4):
-                    exit_dirs.append(d)
-    
+            if d != enter_dir and d != REVERSE_DIRECTIONS[enter_dir] and isValidDirection(grid, num_cols, pos, d, 4):
+                exit_dirs.append(d)
+            elif d == enter_dir and isValidDirection(grid, num_cols, pos, d):
+                exit_dirs.append(d)
     elif streak >= 10:
         for d in DIRECTIONS.keys():
-            if d != REVERSE_DIRECTIONS[enter_dir] and d != enter_dir:
-                if isValidDirection(grid, num_cols, pos, d, 4):
-                    exit_dirs.append(d)
-
+            if d != REVERSE_DIRECTIONS[enter_dir] and d != enter_dir and isValidDirection(grid, num_cols, pos, d, 4):
+                exit_dirs.append(d)
     return exit_dirs
 
-# heap stores (loss, pos, direction, streak)
+# heap stores in format (loss, position, direction, streak)
 def getMinHeatLoss(grid, num_cols, start, end):
-    prev = {}
     losses = {}
-    # losses = defaultdict(lambda: float('inf'))
-    # losses[start] = 0
     pq = []
     heapq.heappush(pq, (0, start, EAST, 0))
 
     while pq:
         loss, pos, enter_dir, streak = heapq.heappop(pq)
         if pos == end:
-            print(losses[(pos, enter_dir, streak)])
-            return losses, prev
-        
-        # print(pos)
+            return loss
 
         for exit_dir in getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
-            # print(pos, enter_dir, exit_dir, streak)
             newPos = pos + DIRECTIONS[exit_dir]
             newLoss = loss + getTile(grid, newPos, num_cols)
             if exit_dir == enter_dir:
@@ -123,9 +91,8 @@ def getMinHeatLoss(grid, num_cols, start, end):
             key = (newPos, exit_dir, newStreak)
             if key not in losses or losses[key] > newLoss:
                 losses[key] = newLoss
-                prev[key] = pos
                 heapq.heappush(pq, (newLoss, newPos, exit_dir, newStreak))
-    return losses, prev
+    return -1
 
 def calculateMinHeatLoss(filename):
     result = 0
@@ -140,10 +107,7 @@ def calculateMinHeatLoss(filename):
         DIRECTIONS[WEST] = -1
 
         end = (len(grid) * num_cols) - 1
-        losses, prev = getMinHeatLoss(grid, num_cols, 0, end)
-        # print(losses)
-        # result = losses[end]
-        # print(getPossibleDirections(grid, num_cols, 13, NORTH, 2))
+        result = getMinHeatLoss(grid, num_cols, 0, end)
         
     print('Answer for {} is {}'.format(filename, result))
 

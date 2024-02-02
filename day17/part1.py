@@ -1,11 +1,8 @@
 import os
 import heapq
 
-from collections import defaultdict
-
 dayDir = os.path.dirname(__file__)
 sampleFilename = os.path.join(dayDir, 'sampleInput1.txt')
-sampleFilename2 = os.path.join(dayDir, 'sampleInput2.txt')
 inputFilename = os.path.join(dayDir, 'input.txt')
 
 DIRECTIONS = {}
@@ -48,22 +45,6 @@ def isValidDirection(grid, position, direction, num_cols):
         return False
     return True
 
-def getEnergized(grid, poses, num_cols):
-    energized = set()
-    seen = set()
-    while len(poses) > 0:
-        pose = poses.pop(0)
-        if pose not in seen:
-            (position, direction) = pose
-            tile = getTile(grid, position, num_cols)
-            energized.add(position)
-            seen.add(pose)
-            directions = TILES[tile][direction]
-            for d in directions:
-                if isValidDirection(grid, position, d, num_cols):
-                    poses.append((position + DIRECTIONS[d], d))
-    return energized
-
 def getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
     exit_dirs = []
     for d in DIRECTIONS.keys():
@@ -71,22 +52,16 @@ def getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
             exit_dirs.append(d)
     return exit_dirs
 
-# heap stores (loss, pos, direction, streak)
+# heap stores in format (loss, position, direction, streak)
 def getMinHeatLoss(grid, num_cols, start, end):
-    prev = {}
     losses = {}
-    # losses = defaultdict(lambda: float('inf'))
-    # losses[start] = 0
     pq = []
     heapq.heappush(pq, (0, start, EAST, 0))
 
     while pq:
         loss, pos, enter_dir, streak = heapq.heappop(pq)
         if pos == end:
-            print(losses[(pos, enter_dir, streak)])
-            return losses, prev
-        
-        # print(pos)
+            return loss
 
         for exit_dir in getPossibleDirections(grid, num_cols, pos, enter_dir, streak):
             newPos = pos + DIRECTIONS[exit_dir]
@@ -98,9 +73,8 @@ def getMinHeatLoss(grid, num_cols, start, end):
             key = (newPos, exit_dir, newStreak)
             if key not in losses or losses[key] > newLoss:
                 losses[key] = newLoss
-                prev[key] = pos
                 heapq.heappush(pq, (newLoss, newPos, exit_dir, newStreak))
-    return losses, prev
+    return -1
 
 def calculateMinHeatLoss(filename):
     result = 0
@@ -115,13 +89,10 @@ def calculateMinHeatLoss(filename):
         DIRECTIONS[WEST] = -1
 
         end = (len(grid) * num_cols) - 1
-        losses, prev = getMinHeatLoss(grid, num_cols, 0, end)
-        # print(losses)
-        # result = losses[end]
-        # print(getPossibleDirections(grid, num_cols, 13, NORTH, 2))
+        result = getMinHeatLoss(grid, num_cols, 0, end)
         
     print('Answer for {} is {}'.format(filename, result))
 
 
 calculateMinHeatLoss(sampleFilename) # 102
-calculateMinHeatLoss(inputFilename) # 
+calculateMinHeatLoss(inputFilename) # 1023
