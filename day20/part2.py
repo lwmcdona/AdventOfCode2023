@@ -126,4 +126,5 @@ def findButtonPressesForLowPulseToRx(filename):
         
     print('Answer for {} is {}'.format(filename, result))
 
+# NOTE: solution only works for the input, not for the samples. There is no 'rx' node in the samples.
 findButtonPressesForLowPulseToRx(inputFilename) # 215252378794009

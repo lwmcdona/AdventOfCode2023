@@ -24,7 +24,6 @@ def getNumSteps(filename):
         for line in lines[1:]:
             m = pattern.match(line)
             if m:
-                # print(m.groups())
                 network[m[1]] = (m[2], m[3])
                 if m[1][-1] == 'A':
                     starting_nodes.append(m[1])
@@ -38,7 +37,6 @@ def getNumSteps(filename):
         steps = 0
         finished = False
         while not finished:
-            # print(instructions[i])
             starting_nodes[n] = network[starting_nodes[n]][directions[instructions[i]]]
             steps += 1
             if starting_nodes[n][-1] == 'Z':

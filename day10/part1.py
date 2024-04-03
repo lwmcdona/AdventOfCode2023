@@ -79,11 +79,9 @@ def findFarthestSegment(filename):
             tmp = pos + DIRECTIONS[i]
             pipe = getPipe(grid, tmp, row_len)
             if pipe in SEGMENTS and i in SEGMENTS[pipe]:
-                print(SEGMENTS[pipe])
                 direction = i
                 pos = tmp
                 steps += 1
-                print("({},{})".format(getX(pos, row_len), getY(pos, row_len)))
                 break
 
         while start != pos:

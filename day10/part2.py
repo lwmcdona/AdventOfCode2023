@@ -112,9 +112,11 @@ def countEnclosedTiles(filename):
         
         area = int(abs(area / 2))
         
+        # use Pick's theorem to calculate result
         # num enclosed = area + 1 - (num_points / 2)
         picksResult = int(area + 1 - (len(coords) / 2))
 
+        # scan the grid to calculate result
         for i in range(len(grid)):
             region = False
             for j in range(len(grid[i])):
@@ -137,7 +139,6 @@ def countEnclosedTiles(filename):
                             if connections[0] in SEGMENTS[key] and connections[1] in SEGMENTS[key]:
                                 c = key
                                 break
-                        print("S is {}".format(c))
                         
                     if c == '|' or c == '7' or c == 'F':
                         region = not region
@@ -145,8 +146,8 @@ def countEnclosedTiles(filename):
                     if region == True: 
                         scanResult += 1
         
-    print('Answer for {} is {}'.format(filename, picksResult))
-    print('Answer for {} is {}'.format(filename, scanResult))
+    print("Pick's answer for {} is {}".format(filename, picksResult))
+    print("Scan answer for {} is {}".format(filename, scanResult))
 
 countEnclosedTiles(sampleFilename) # 1
 countEnclosedTiles(sampleFilename2) # 2

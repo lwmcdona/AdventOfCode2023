@@ -101,7 +101,6 @@ def getMinLocation(filename):
 
     print('Answer for {} is {}'.format(filename, result))
 
-
 getMinLocation(sampleFilename)
 getMinLocation(inputFilename)
 

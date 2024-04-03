@@ -69,7 +69,6 @@ def createSortingTuple(hand_tuple):
         CARD_VALUES[hand_tuple[0][4]]
     )
 
-
 def getTotalWinningsWithJoker(filename):
     result = 0
     with open(filename) as f:
@@ -77,13 +76,10 @@ def getTotalWinningsWithJoker(filename):
         hand_tuples = [(values[0], int(values[1])) for values in [line.strip().split() for line in lines]] 
         for hand in hand_tuples:
             createSortingTuple(hand)
-            # print((getHandType(hand_tuples[0]), CARD_VALUES[hand_tuples[0][0]], CARD_VALUES[hand_tuples[0][1]], CARD_VALUES[hand_tuples[0][2]], CARD_VALUES[hand_tuples[0][3]], CARD_VALUES[hand_tuples[0][4]]))   
         hand_tuples.sort(key = lambda x: createSortingTuple(x), reverse=False)
         for i in range(len(hand_tuples)):
             result += (i + 1) * hand_tuples[i][1]
-        # print(hands)
     print('Answer for {} is {}'.format(filename, result))
-
 
 getTotalWinningsWithJoker(sampleFilename)
 getTotalWinningsWithJoker(inputFilename)

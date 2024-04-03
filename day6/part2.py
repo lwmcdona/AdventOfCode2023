@@ -17,8 +17,6 @@ def getAllWaysToWin(filename):
         lines = f.readlines()
         time = int(''.join(lines[0].strip().split()[1:]))
         distance = int(''.join(lines[1].strip().split()[1:]))
-        print(time)
-        print(distance)
         result *= getNumWaysToWin(time, distance)
     print('Answer for {} is {}'.format(filename, result))
 

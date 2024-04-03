@@ -29,7 +29,6 @@ def getMinLocation(filename):
                 continue
             elif line.find('seeds') != -1:
                 seeds = [int(x) for x in pattern.findall(line)]
-                print(seeds)
             elif line.find('map') != -1:
                 section += 1
                 maps.append({})
@@ -42,25 +41,8 @@ def getMinLocation(filename):
     for section in starts:
         section.sort()
 
-    print(starts[2])
-
-    print(binarySearch(starts[2], -1))
-    print(binarySearch(starts[2], 0))
-    print(binarySearch(starts[2], 1))
-    print(binarySearch(starts[2], 6))
-    print(binarySearch(starts[2], 7))
-    print(binarySearch(starts[2], 8))
-    print(binarySearch(starts[2], 10))
-    print(binarySearch(starts[2], 11))
-    print(binarySearch(starts[2], 12))
-    print(binarySearch(starts[2], 52))
-    print(binarySearch(starts[2], 53))
-    print(binarySearch(starts[2], 54))
-
-    # locations = []
     result = None
     for seed in seeds:
-        print('Seed: ', seed)
         converted = seed
         for i in range(len(maps)):
             start_index = binarySearch(starts[i], converted)
@@ -69,7 +51,6 @@ def getMinLocation(filename):
                 (source_end, conversion) = maps[i][source_start]
                 if converted < source_end:
                     converted += conversion
-            print(converted)
         if not result:
             result = converted
         else: 

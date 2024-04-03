@@ -22,7 +22,6 @@ def calculateCardPoints(filename):
             result += points
     print('Answer for {} is {}'.format(filename, result))
 
-
 calculateCardPoints(sampleFilename)
 calculateCardPoints(inputFilename)
 

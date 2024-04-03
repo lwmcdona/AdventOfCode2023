@@ -1,5 +1,4 @@
 import os
-import re
 
 day2Dir = os.path.dirname(__file__)
 sampleFilename = os.path.join(day2Dir, 'sampleInput1.txt')

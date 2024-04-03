@@ -30,17 +30,7 @@ def getTotalScratchCards(filename):
         result = 0
         for i in range(len(lines)):
             result += getNumScratchcards(i, lines, memo)
-            # points = 0
-            # line = line.split(':')[1].split('|')
-            # winning_nums = re.findall(r'\d+', line[0])
-            # my_nums = re.findall(r'\d+', line[1])
-            # for num in my_nums:
-            #     if num in winning_nums:
-            #         if points == 0:
-            #             points = 1
-            #         else: 
-            #             points *= 2
-            # result += points
+            
     print('Answer for {} is {}'.format(filename, result))
 
 getTotalScratchCards(sampleFilename)
